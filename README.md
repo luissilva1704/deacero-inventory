@@ -212,7 +212,7 @@ Desplieuge a GCP:
 
 
 
-##Ejecucion test profiling
+## Ejecucion test profiling
 ```bash
 # situado en la raiz
 1.- ejecutar "k6 run src/test/perf/test-products-get-10rps.js"
@@ -225,6 +225,13 @@ Desplieuge a GCP:
     checks_failed......: 0.00%   0 out of 168
     ✓ status 200
     ...
+
+## Documentacion swagger open api
+https://deacero-inventario-api-368147415867.us-central1.run.app/swagger-ui/index.html
+
+
+## Colection postman
+- setear una variable con alcance de coleccion llamada **baseURL** con valor **localhost:8080** o **https://deacero-inventario-api-368147415867.us-central1.run.app**
 
 
 

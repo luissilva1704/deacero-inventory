@@ -1,0 +1,436 @@
+{
+	"info": {
+		"_postman_id": "96f39ed4-5166-42ed-88a2-5747e0bc251a",
+		"name": "inventory_collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26531147",
+		"_collection_link": "https://universal-resonance-964179.postman.co/workspace/deacero~90365390-e349-4cf0-9541-1cee1215f691/collection/26531147-96f39ed4-5166-42ed-88a2-5747e0bc251a?action=share&source=collection_link&creator=26531147"
+	},
+	"item": [
+		{
+			"name": "product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"producto2\",\n    \"description\":\"description 2\",\n    \"category\":\"category1\",\n    \"price\":200.00,\n    \"sku\":\"11111111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/products",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"producto3updated\",\n    \"description\":\"description 3\",\n    \"category\":\"category1\",\n    \"price\":200.00,\n    \"sku\":\"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/products/3bbc7804-8b71-409b-a07f-ed73252743d5",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"products",
+						"3bbc7804-8b71-409b-a07f-ed73252743d5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products with filters",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/products",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"producto3\",\n    \"description\":\"description 3\",\n    \"category\":\"category1\",\n    \"price\":200.00,\n    \"sku\":\"1\"\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/products/6dacb929-aeff-40ba-ab19-3cdf2c6f612f",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"products",
+						"6dacb929-aeff-40ba-ab19-3cdf2c6f612f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product/{id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"producto3\",\n    \"description\":\"description 3\",\n    \"category\":\"category1\",\n    \"price\":200.00,\n    \"sku\":\"1\"\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/products/3bbc7804-8b71-409b-a07f-ed73252743d5",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"products",
+						"3bbc7804-8b71-409b-a07f-ed73252743d5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initial inventory",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"productId\": \"8ab6016e-dd48-4f0a-91cc-1bd7fe76f503\",\n    \"storeId\": \"S001\",\n    \"quantity\": 100,\n    \"minStock\": 10\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/load",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"load"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory in",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"productId\": \"0c94b3a5-bfa4-4e93-9828-2b6cb750f13a\",\n    \"storeId\": \"S001\",\n    \"quantity\": 25\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/in",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory out",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"productId\": \"8ab6016e-dd48-4f0a-91cc-1bd7fe76f503\",\n    \"storeId\": \"S001\",\n    \"quantity\": 2\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/out",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"out"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "history",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/history?productId=3fa85f64-5717-4562-b3fc-2c963f66afa6&storeId=S001&page=0&size=20&sort=timestamp,desc",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"history"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+						},
+						{
+							"key": "storeId",
+							"value": "S001"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "20"
+						},
+						{
+							"key": "sort",
+							"value": "timestamp,desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "history withput filters",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/history",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory by store",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/stores/S001/inventory",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"stores",
+						"S001",
+						"inventory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transfer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"productId\": \"0c94b3a5-bfa4-4e93-9828-2b6cb750f13a\",\n    \"sourceStoreId\": \"S001\",\n    \"targetStoreId\": \"S002\",\n    \"quantity\": 5\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/transfer",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "alert",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/deacero/api/v1/inventory/alerts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"deacero",
+						"api",
+						"v1",
+						"inventory",
+						"alerts"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

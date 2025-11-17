@@ -59,7 +59,7 @@ class InventoryControllerTest {
 				.id(UUID.randomUUID()).name("A").category("C").price(new BigDecimal("1.00")).sku("S1").build()));
 		Mockito.when(productService.listProducts(any(), any(), any(), any(), any())).thenReturn(page);
 
-		mvc.perform(get("/api/products"))
+		mvc.perform(get("/deacero/api/v1/products"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.success", is(true)))
 				.andExpect(jsonPath("$.data.content[0].name", is("A")));
@@ -70,7 +70,7 @@ class InventoryControllerTest {
 		UUID id = UUID.randomUUID();
 		Mockito.when(productService.getProduct(id)).thenReturn(Optional.of(ProductResponse.builder().id(id).name("A").build()));
 
-		mvc.perform(get("/api/products/" + id))
+		mvc.perform(get("/deacero/api/v1/products/" + id))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data.name", is("A")));
 	}
@@ -80,7 +80,7 @@ class InventoryControllerTest {
 		UUID id = UUID.randomUUID();
 		Mockito.when(productService.getProduct(id)).thenReturn(Optional.empty());
 
-		mvc.perform(get("/api/products/" + id))
+		mvc.perform(get("/deacero/api/v1/products/" + id))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.success", is(false)))
 				.andExpect(jsonPath("$.code", is("NOT_FOUND")));
@@ -91,7 +91,7 @@ class InventoryControllerTest {
 		ProductResponse resp = ProductResponse.builder().id(UUID.randomUUID()).name("A").build();
 		Mockito.when(productService.createProduct(any())).thenReturn(resp);
 
-		mvc.perform(post("/api/products")
+		mvc.perform(post("/deacero/api/v1/products")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"name\":\"A\",\"category\":\"C\",\"price\":10.0,\"sku\":\"S1\"}"))
 				.andExpect(status().isCreated())
@@ -104,7 +104,7 @@ class InventoryControllerTest {
 		ProductResponse resp = ProductResponse.builder().id(id).name("B").build();
 		Mockito.when(productService.updateProduct(eq(id), any())).thenReturn(Optional.of(resp));
 
-		mvc.perform(put("/api/products/" + id)
+		mvc.perform(put("/deacero/api/v1/products/" + id)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"name\":\"B\"}"))
 				.andExpect(status().isOk())
@@ -112,9 +112,22 @@ class InventoryControllerTest {
 	}
 
 	@Test
+	void updateProduct_notFound() throws Exception {
+		UUID id = UUID.randomUUID();
+		Mockito.when(productService.updateProduct(eq(id), any())).thenReturn(Optional.empty());
+
+		mvc.perform(put("/deacero/api/v1/products/" + id)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"name\":\"Z\"}"))
+				.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.success", is(false)))
+				.andExpect(jsonPath("$.code", is("NOT_FOUND")));
+	}
+
+	@Test
 	void deleteProduct_ok() throws Exception {
 		UUID id = UUID.randomUUID();
-		mvc.perform(delete("/api/products/" + id))
+		mvc.perform(delete("/deacero/api/v1/products/" + id))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.success", is(true)));
 	}
@@ -124,14 +137,14 @@ class InventoryControllerTest {
 		Mockito.when(inventoryService.getInventoryByStore("S1"))
 				.thenReturn(List.of(InventoryItemResponse.builder().storeId("S1").productId(UUID.randomUUID()).quantity(1).minStock(0).build()));
 
-		mvc.perform(get("/api/stores/S1/inventory"))
+		mvc.perform(get("/deacero/api/v1/stores/S1/inventory"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data[0].storeId", is("S1")));
 	}
 
 	@Test
 	void transfer_ok() throws Exception {
-		mvc.perform(post("/api/inventory/transfer")
+		mvc.perform(post("/deacero/api/v1/inventory/transfer")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"productId\":\"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\"sourceStoreId\":\"A\",\"targetStoreId\":\"B\",\"quantity\":1}"))
 				.andExpect(status().isOk())
@@ -143,7 +156,7 @@ class InventoryControllerTest {
 		Mockito.when(inventoryService.listLowStockAlerts())
 				.thenReturn(List.of(LowStockProductResponse.builder().productName("X").build()));
 
-		mvc.perform(get("/api/inventory/alerts"))
+		mvc.perform(get("/deacero/api/v1/inventory/alerts"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data[0].productName", is("X")));
 	}
@@ -151,24 +164,24 @@ class InventoryControllerTest {
 	@Test
 	void load_in_out_history_ok() throws Exception {
 		// load
-		mvc.perform(post("/api/inventory/load")
+		mvc.perform(post("/deacero/api/v1/inventory/load")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"productId\":\"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\"storeId\":\"S1\",\"quantity\":10,\"minStock\":1}"))
 				.andExpect(status().isCreated());
 		// in
-		mvc.perform(post("/api/inventory/in")
+		mvc.perform(post("/deacero/api/v1/inventory/in")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"productId\":\"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\"storeId\":\"S1\",\"quantity\":5}"))
 				.andExpect(status().isCreated());
 		// out
-		mvc.perform(post("/api/inventory/out")
+		mvc.perform(post("/deacero/api/v1/inventory/out")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"productId\":\"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\"storeId\":\"S1\",\"quantity\":2}"))
 				.andExpect(status().isCreated());
 		// history
 		Page<TransactionResponse> page = new PageImpl<>(List.of(TransactionResponse.builder().build()));
 		Mockito.when(inventoryService.listHistory(any(), any(), any())).thenReturn(page);
-		mvc.perform(get("/api/inventory/history"))
+		mvc.perform(get("/deacero/api/v1/inventory/history"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.success", is(true)));
 	}

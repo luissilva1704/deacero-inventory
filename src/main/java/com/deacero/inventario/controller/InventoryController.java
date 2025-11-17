@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
-@RequestMapping("/deacero/api")
+@RequestMapping("/deacero/api/v1")
 @Tag(name = "Inventory", description = "Inventory management")
 public class InventoryController {
 
@@ -61,7 +61,7 @@ public class InventoryController {
             @PageableDefault(size = 20) Pageable pageable
     ) {
         Page<ProductResponse> data = productService.listProducts(category, minPrice, maxPrice, stock, pageable);
-        return GenericResponse.ok(data, "Products fetched", "/deacero/api/products");
+        return GenericResponse.ok(data, "Products fetched", "/deacero/api/v1/products");
     }
 
     @GetMapping("/products/{id}")
@@ -71,7 +71,7 @@ public class InventoryController {
     public GenericResponse<ProductResponse> getProduct(@PathVariable java.util.UUID id) {
         ProductResponse data = productService.getProduct(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-        return GenericResponse.ok(data, "Product fetched", "/deacero/api/products/" + id);
+        return GenericResponse.ok(data, "Product fetched", "/deacero/api/v1/products/" + id);
     }
 
     @PostMapping("/products")
@@ -82,7 +82,7 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<ProductResponse> createProduct(@Valid @RequestBody ProductRequest product) {
         ProductResponse created = productService.createProduct(product);
-        return GenericResponse.ok(created, "Product created", "/deacero/api/products");
+        return GenericResponse.ok(created, "Product created", "/deacero/api/v1/products");
     }
 
     @PutMapping("/products/{id}")
@@ -93,7 +93,7 @@ public class InventoryController {
 	public GenericResponse<ProductResponse> updateProduct(@PathVariable java.util.UUID id, @RequestBody ProductRequest product) {
         ProductResponse data = productService.updateProduct(id, product)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-        return GenericResponse.ok(data, "Product updated", "/deacero/api/products/" + id);
+        return GenericResponse.ok(data, "Product updated", "/deacero/api/v1/products/" + id);
     }
 
     @DeleteMapping("/products/{id}")
@@ -103,7 +103,7 @@ public class InventoryController {
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public GenericResponse<Void> deleteProduct(@PathVariable java.util.UUID id) {
         productService.deleteProduct(id);
-        return GenericResponse.ok(null, "Product deleted", "/deacero/api/products/" + id);
+        return GenericResponse.ok(null, "Product deleted", "/deacero/api/v1/products/" + id);
     }
 
     // 2. Gestión de Stock
@@ -114,7 +114,7 @@ public class InventoryController {
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public GenericResponse<List<InventoryItemResponse>> listInventoryByStore(@PathVariable("id") String storeId) {
         List<InventoryItemResponse> data = inventoryService.getInventoryByStore(storeId);
-        return GenericResponse.ok(data, "Inventory fetched", "/deacero/api/stores/" + storeId + "/inventory");
+        return GenericResponse.ok(data, "Inventory fetched", "/deacero/api/v1/stores/" + storeId + "/inventory");
     }
 
     @PostMapping("/inventory/transfer")
@@ -124,7 +124,7 @@ public class InventoryController {
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public GenericResponse<Void> transferInventory(@RequestBody TransferRequest request) {
         inventoryService.transfer(request);
-        return GenericResponse.ok(null, "Transfer completed", "/deacero/api/inventory/transfer");
+        return GenericResponse.ok(null, "Transfer completed", "/deacero/api/v1/inventory/transfer");
     }
 
     @GetMapping("/inventory/alerts")
@@ -133,7 +133,7 @@ public class InventoryController {
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public GenericResponse<List<LowStockProductResponse>> lowStockAlerts() {
         List<LowStockProductResponse> data = inventoryService.listLowStockAlerts();
-        return GenericResponse.ok(data, "Low stock alerts", "/deacero/api/inventory/alerts");
+        return GenericResponse.ok(data, "Low stock alerts", "/deacero/api/v1/inventory/alerts");
     }
 
     // 3. Carga inicial, entradas, salidas e historial
@@ -145,7 +145,7 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<Void> loadInitial(@Valid @RequestBody StockLoadRequest request) {
         inventoryService.loadInitialStock(request);
-        return GenericResponse.ok(null, "Initial stock loaded", "/deacero/api/inventory/load");
+        return GenericResponse.ok(null, "Initial stock loaded", "/deacero/api/v1/inventory/load");
     }
 
     @PostMapping("/inventory/in")
@@ -156,7 +156,7 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<Void> registerEntry(@Valid @RequestBody MovementRequest request) {
         inventoryService.registerEntry(request);
-        return GenericResponse.ok(null, "Entry registered", "/deacero/api/inventory/in");
+        return GenericResponse.ok(null, "Entry registered", "/deacero/api/v1/inventory/in");
     }
 
     @PostMapping("/inventory/out")
@@ -167,7 +167,7 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<Void> registerOut(@Valid @RequestBody MovementRequest request) {
         inventoryService.registerOut(request);
-        return GenericResponse.ok(null, "Out registered", "/deacero/api/inventory/out");
+        return GenericResponse.ok(null, "Out registered", "/deacero/api/v1/inventory/out");
     }
 
     @GetMapping("/inventory/history")
@@ -180,7 +180,7 @@ public class InventoryController {
             @PageableDefault(size = 20) Pageable pageable
     ) {
         Page<TransactionResponse> data = inventoryService.listHistory(productId, storeId, pageable);
-        return GenericResponse.ok(data, "History fetched", "/deacero/api/inventory/history");
+        return GenericResponse.ok(data, "History fetched", "/deacero/api/v1/inventory/history");
     }
 
 }

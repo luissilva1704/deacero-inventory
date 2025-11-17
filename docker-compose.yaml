@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: deacero-postgress
+    restart: always
+    environment:
+      POSTGRES_DB: deacero_inventory_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - deacero_inventory_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  inventario-api:
+    build: .
+    container_name: deacero-inventory-api
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+
+volumes:
+  deacero_inventory_data:
+    driver: local

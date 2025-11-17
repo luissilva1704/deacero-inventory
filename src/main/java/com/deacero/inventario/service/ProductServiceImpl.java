@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -37,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Page<ProductResponse> listProducts(String category, BigDecimal minPrice, BigDecimal maxPrice, Integer minStock, Pageable pageable) {
+		log.info("Listing products with category: {}, minPrice: {}, maxPrice: {}, minStock: {}", category, minPrice, maxPrice, minStock);
 		Specification<Product> spec = buildSpecification(category, minPrice, maxPrice);
 		Page<Product> basePage = productRepository.findAll(spec, pageable);
 
@@ -44,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 			return productMapper.toResponsePage(basePage, pageable);
 		}
 
-		// Filter by minimum stock by intersecting with productIds that meet min stock
+		
 		List<UUID> productIdsWithStock = inventoryRepository.findProductIdsWithTotalQuantityAtLeast(minStock);
 		if (productIdsWithStock.isEmpty()) {
 			return Page.empty(pageable);
@@ -82,12 +85,26 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public ProductResponse createProduct(ProductRequest product) {
+		validateCreateRequest(product);
 		productRepository.findBySku(product.getSku()).ifPresent(p -> {
 			throw new ConflictException("SKU already exists");
 		});
 		Product toSave = productMapper.toEntity(product);
 		Product saved = productRepository.save(toSave);
 		return productMapper.toResponse(saved);
+	}
+	
+	private void validateCreateRequest(ProductRequest product) {
+		if (product == null) {
+			throw new BadRequestException("Product data is required");
+		}
+		boolean missingName = product.getName() == null || product.getName().isBlank();
+		boolean missingCategory = product.getCategory() == null || product.getCategory().isBlank();
+		boolean missingSku = product.getSku() == null || product.getSku().isBlank();
+		boolean invalidPrice = product.getPrice() == null || product.getPrice().compareTo(BigDecimal.ZERO) <= 0;
+		if (missingName || missingCategory || missingSku || invalidPrice) {
+			throw new BadRequestException("Missing or invalid fields");
+		}
 	}
 
 	@Override

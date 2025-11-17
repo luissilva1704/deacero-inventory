@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class ProductRequest {
 	@NotBlank
 	private String name;
-	@NotBlank
+	// description is optional
 	private String description;
 	@NotBlank
 	private String category;
@@ -28,7 +28,6 @@ public class ProductRequest {
 	@Positive
 	private BigDecimal price;
 
-	@Pattern(regexp = "^[0-9]{8}$")
 	@NotBlank
 	private String sku;
 }

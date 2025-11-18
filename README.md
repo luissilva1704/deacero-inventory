@@ -211,6 +211,11 @@ Desplieuge a GCP:
   - `Crear` servicio en cloud run y seleccionar el contenedor de artifact registry que acabamos de crear.
 
 
+## Ejecucion de unit test
+```basg
+  mvn clean test
+  ```
+  ir a la ruta target/site/jacoco/index.html para visualizar el reporte
 
 ## Ejecucion test profiling
 ```bash
@@ -232,7 +237,4 @@ https://deacero-inventario-api-368147415867.us-central1.run.app/swagger-ui/index
 
 ## Colection postman
 - setear una variable con alcance de coleccion llamada **baseURL** con valor **localhost:8080** o **https://deacero-inventario-api-368147415867.us-central1.run.app**
-
-
-
 

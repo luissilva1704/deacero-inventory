@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -26,8 +27,19 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = InventoryController.class)
+@WebMvcTest(
+		controllers = InventoryController.class,
+		excludeAutoConfiguration = {
+				org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+				org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class
+		},
+		properties = {
+				"springdoc.api-docs.enabled=false",
+				"springdoc.swagger-ui.enabled=false"
+		}
+)
 @Import(InventoryControllerTest.TestConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class InventoryControllerTest {
 
 	@Autowired
